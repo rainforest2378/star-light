@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Oct  7 20:10:53 2019
-
+扫描某一网段的主机，将存活的主机IP，主机名和状态存入数据库
 @author: PC
 """
 # 导入pymysql和nmap模块
