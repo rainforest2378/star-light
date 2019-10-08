@@ -1,0 +1,42 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Oct  7 20:10:53 2019
+
+@author: PC
+"""
+# 导入pymysql和nmap模块
+import pymysql
+import nmap
+
+
+nm = nmap.PortScanner()
+temp = input("请输入您要扫描的网段：")
+nm.scan(hosts=temp,arguments='-PA -PS -PU -PO -sn -PR')
+
+
+conn = pymysql.connect(host='cdb-faqfehvo.bj.tencentcdb.com', port=10172, user='fyl_chj_txmysql',password='fyl@chjtxmysql',database='fyl',charset='utf8')
+# 得到一个可以执行SQL语句的光标对象
+cursor = conn.cursor()
+
+
+for host in nm.all_hosts():
+#print host,nm[host].state(),nm[host].all_protocols(),nm[host].all_tcp()
+# 定义要执行的SQL语句
+    sql="insert into hostdiscovery (hostname,IPaddress,state) VALUE (%s,%s,%s);"
+    hostname=nm[host].hostnames()[0]['name']
+    IPaddress=host
+    state=nm[host].state()
+    try:
+        cursor.execute(sql,(hostname,IPaddress,state))
+        conn.commit()   #把修改的数据提交到数据库
+        print("ip: %s  state: %s"%(IPaddress,state))
+    except Exception as e:
+        print('failed')
+        conn.rollback() #捕捉到错误就回滚
+    
+
+
+# 关闭光标对象
+cursor.close()
+# 关闭数据库连接
+conn.close()
